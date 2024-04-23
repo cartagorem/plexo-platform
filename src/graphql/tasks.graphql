@@ -1,5 +1,5 @@
-query Tasks {
-  tasks {
+query Tasks($sortFactor: String, $sortedWay: SortOrder, $page: Int, $limit: Int) {
+  tasks(input: { sortBy: $sortFactor, sortOrder: $sortedWay, offset: $page, limit: $limit }) {
     id
     priority
     status

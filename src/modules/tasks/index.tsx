@@ -19,7 +19,7 @@ import { LayoutColumns, LayoutRows } from "tabler-icons-react";
 import { getCookie, setCookie } from "cookies-next";
 import { useQuery } from "urql";
 
-import { TasksDocument, TaskStatus } from "integration/graphql";
+import { SortOrder, TasksDocument, TaskStatus } from "integration/graphql";
 import { TaskCardElement, TaskListElement } from "components/ui/Task/task";
 import { StatusIcon, statusName } from "components/ui/Task/status";
 import { usePlexoContext } from "context/PlexoContext";
@@ -350,10 +350,27 @@ export const TasksPageContent = () => {
   const { setNavBarOpened, setTasks, authCookie } = usePlexoContext();
   const [viewMode, setViewMode] = useState<"list" | "columns">("list");
 
+  const [page, setPage] = useState<number>(0);
+
   const [{ data: tasksData, fetching: isFetchingTasksData }] = useQuery({
     pause: authCookie ? false : true,
     query: TasksDocument,
+    variables: {
+      sortFactor: "updated_at",
+      sortedWay: SortOrder.Desc,
+      page: page,
+      limit: 10,
+      }
   });
+
+  useEffect(() => {
+    setInterval(() => {
+      if(tasksData != undefined && tasksData.tasks.length <= 10) {
+        setPage(page + 10);
+      }
+    },10000)
+      console.log({page})
+  }, [tasksData])
 
   //Filters
   let storedFilterValues;

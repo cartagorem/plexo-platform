@@ -1224,7 +1224,12 @@ export type SuggestProjectQuery = {
   };
 };
 
-export type TasksQueryVariables = Exact<{ [key: string]: never }>;
+export type TasksQueryVariables = Exact<{
+  sortFactor?: InputMaybe<Scalars["String"]["input"]>;
+  sortedWay?: InputMaybe<SortOrder>;
+  page?: InputMaybe<Scalars["Int"]["input"]>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+}>;
 
 export type TasksQuery = {
   __typename?: "QueryRoot";
@@ -2524,12 +2529,65 @@ export const TasksDocument = {
       kind: "OperationDefinition",
       operation: "query",
       name: { kind: "Name", value: "Tasks" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "sortFactor" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "sortedWay" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "SortOrder" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "page" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "limit" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+      ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
           {
             kind: "Field",
             name: { kind: "Name", value: "tasks" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "sortBy" },
+                      value: { kind: "Variable", name: { kind: "Name", value: "sortFactor" } },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "sortOrder" },
+                      value: { kind: "Variable", name: { kind: "Name", value: "sortedWay" } },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "offset" },
+                      value: { kind: "Variable", name: { kind: "Name", value: "page" } },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "limit" },
+                      value: { kind: "Variable", name: { kind: "Name", value: "limit" } },
+                    },
+                  ],
+                },
+              },
+            ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
